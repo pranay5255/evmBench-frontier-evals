@@ -339,10 +339,22 @@ class PaperBench(PythonCodingEval):
             )
 
     def check_for_lfs(self) -> None:
-        # Check dataset has been pulled from git lfs
-        papers_dir = get_paperbench_data_dir() / "papers"
-        papers = list(papers_dir.glob("**/paper.md"))
+        """
+        Ensure required papers for the selected split are hydrated from LFS.
 
-        for paper in papers:
-            with open(paper, "r") as f:
-                assert len(f.readlines()) > 5, f"Paper at {paper} should be pulled from git lfs"
+        We only validate papers that appear in the active ``paper_split`` to allow
+        lightweight CI runs that hydrate a minimal subset of the dataset.
+        """
+
+        papers_dir = get_paperbench_data_dir() / "papers"
+        split_path = get_experiments_dir() / "splits" / f"{self.paper_split}.txt"
+
+        paper_ids = [line.strip() for line in split_path.read_text().splitlines() if line.strip()]
+
+        for paper_id in paper_ids:
+            paper_path = papers_dir / paper_id / "paper.md"
+            assert paper_path.exists(), f"Paper at {paper_path} is missing; hydrate via git lfs."
+            with open(paper_path, "r") as f:
+                assert len(f.readlines()) > 5, (
+                    f"Paper at {paper_path} should be pulled from git lfs"
+                )
