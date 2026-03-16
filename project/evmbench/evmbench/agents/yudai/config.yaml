@@ -1,0 +1,38 @@
+yudai-default:
+  start: yudai/start.sh
+  instruction_file_name: INSTRUCTIONS.md
+  env_vars:
+    ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    MODEL: claude-sonnet-4-6
+    STEP_LIMIT: "50"
+    COST_LIMIT: "20.0"
+  gateway_sni_hosts:
+    - api.anthropic.com
+    - pypi.org
+    - files.pythonhosted.org
+
+yudai-opus:
+  start: yudai/start.sh
+  instruction_file_name: INSTRUCTIONS.md
+  env_vars:
+    ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    MODEL: claude-opus-4-6
+    STEP_LIMIT: "50"
+    COST_LIMIT: "40.0"
+  gateway_sni_hosts:
+    - api.anthropic.com
+    - pypi.org
+    - files.pythonhosted.org
+
+yudai-haiku:
+  start: yudai/start.sh
+  instruction_file_name: INSTRUCTIONS.md
+  env_vars:
+    ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    MODEL: claude-haiku-4-5-20251001
+    STEP_LIMIT: "60"
+    COST_LIMIT: "5.0"
+  gateway_sni_hosts:
+    - api.anthropic.com
+    - pypi.org
+    - files.pythonhosted.org
